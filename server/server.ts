@@ -1,9 +1,7 @@
-
-
-
 // FIX: Use `import type` to explicitly import types from express and avoid conflicts with other libraries like node-fetch.
 // FIX: Aliased Request and Response types to resolve type conflicts with other libraries.
-import express, { Express, Request as ExpressRequest, Response as ExpressResponse, NextFunction } from 'express';
+import express from 'express';
+import type { Request as ExpressRequest, Response as ExpressResponse, NextFunction } from 'express';
 // FIX: Alias Request and Response to avoid type conflicts with other libraries (e.g., node-fetch, DOM).
 import http from 'http';
 // FIX: Corrected typo in 'https' import. Was 'https-'.
@@ -187,7 +185,7 @@ export const classifyPost = (post: SocialPost): ClassifiedSocialPost => {
 
 // --- Server Setup ---
 // FIX: Explicitly typed 'app' as 'Express' to ensure correct type inference for its methods.
-const app: Express = express();
+const app = express();
 app.use(cors({
   origin: [
     'http://localhost:5173',
