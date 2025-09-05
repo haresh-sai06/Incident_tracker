@@ -234,10 +234,10 @@ const alertTemplates = loadJsonData<AlertTemplate>('alert_templates.json');
 let users = loadJsonData<User>('users.json');
 
 let alertLogs: AlertLog[] = [];
-const ruleCooldowns = new Map<string, number>(); // ruleId -> timestamp
+// const ruleCooldowns = new Map<string, number>(); // ruleId -> timestamp
 const processedActionIds = new Set<string>(); // For idempotency
-const RULE_COOLDOWN_MS = 15 * 60 * 1000; // 15 minutes
-const SEVERITY_MAP: { [key: string]: number } = { 'Low': 1, 'Medium': 2, 'High': 3, 'Critical': 4 };
+// const RULE_COOLDOWN_MS = 15 * 60 * 1000; // 15 minutes
+// const SEVERITY_MAP: { [key: string]: number } = { 'Low': 1, 'Medium': 2, 'High': 3, 'Critical': 4 };
 
 // --- User Simulation ---
 let currentUser: User = users[0]; // Default to first user
@@ -260,102 +260,102 @@ const broadcast = (data: object) => {
 
 // --- Alerting Engine ---
 
-function getDistanceInMeters(lat1: number, lon1: number, lat2: number, lon2: number) {
-  const R = 6371e3; // metres
-  const φ1 = lat1 * Math.PI / 180;
-  const φ2 = lat2 * Math.PI / 180;
-  const Δφ = (lat2 - lat1) * Math.PI / 180;
-  const Δλ = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}
+// function getDistanceInMeters(lat1: number, lon1: number, lat2: number, lon2: number) {
+//   const R = 6371e3; // metres
+//   const φ1 = lat1 * Math.PI / 180;
+//   const φ2 = lat2 * Math.PI / 180;
+//   const Δφ = (lat2 - lat1) * Math.PI / 180;
+//   const Δλ = (lon2 - lon1) * Math.PI / 180;
+//   const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+//   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//   return R * c;
+// }
 
-function dispatchAlert(rule: AlertRule, context: Record<string, any>) {
-    const template = alertTemplates.find(t => t.id === rule.action.template_id);
-    if (!template) {
-        console.error(`[Alert Dispatcher] Template not found: ${rule.action.template_id}`);
-        return;
-    }
+// function dispatchAlert(rule: AlertRule, context: Record<string, any>) {
+//     const template = alertTemplates.find(t => t.id === rule.action.template_id);
+//     if (!template) {
+//         console.error(`[Alert Dispatcher] Template not found: ${rule.action.template_id}`);
+//         return;
+//     }
 
-    let messageBody = template.body;
-    for (const key in context) {
-        messageBody = messageBody.replace(new RegExp(`{{${key}}}`, 'g'), context[key]);
-    }
+//     let messageBody = template.body;
+//     for (const key in context) {
+//         messageBody = messageBody.replace(new RegExp(`{{${key}}}`, 'g'), context[key]);
+//     }
 
-    const logEntry: AlertLog = {
-        id: `log_${Date.now()}`,
-        timestamp: new Date().toISOString(),
-        rule_id: rule.id,
-        rule_name: rule.name,
-        triggered_by: context.incident_id || `Cluster of ${context.incident_count}`,
-        dispatched_message: messageBody,
-        recipients: rule.action.recipients,
-    };
-    alertLogs.unshift(logEntry); // Add to beginning
-    if (alertLogs.length > 100) alertLogs.pop(); // Keep logs trimmed
+//     const logEntry: AlertLog = {
+//         id: `log_${Date.now()}`,
+//         timestamp: new Date().toISOString(),
+//         rule_id: rule.id,
+//         rule_name: rule.name,
+//         triggered_by: context.incident_id || `Cluster of ${context.incident_count}`,
+//         dispatched_message: messageBody,
+//         recipients: rule.action.recipients,
+//     };
+//     alertLogs.unshift(logEntry); // Add to beginning
+//     if (alertLogs.length > 100) alertLogs.pop(); // Keep logs trimmed
 
-    console.log(`\n--- ALERT DISPATCHED ---`);
-    console.log(`Rule: ${rule.name}`);
-    console.log(`Message: ${messageBody}`);
-    rule.action.recipients.forEach(r => {
-        console.log(`  -> Mock sending to [${r.type.toUpperCase()}] at ${r.target}`);
-    });
-    console.log(`------------------------\n`);
+//     console.log(`\n--- ALERT DISPATCHED ---`);
+//     console.log(`Rule: ${rule.name}`);
+//     console.log(`Message: ${messageBody}`);
+//     rule.action.recipients.forEach(r => {
+//         console.log(`  -> Mock sending to [${r.type.toUpperCase()}] at ${r.target}`);
+//     });
+//     console.log(`------------------------\n`);
     
-    broadcast({ type: 'new-alert-log', payload: logEntry });
-}
+//     broadcast({ type: 'new-alert-log', payload: logEntry });
+// }
 
-function evaluateRules(newIncident: Incident) {
-    const now = Date.now();
-    for (const rule of alertRules) {
-        if (!rule.isEnabled) continue;
+// function evaluateRules(newIncident: Incident) {
+//     const now = Date.now();
+//     for (const rule of alertRules) {
+//         if (!rule.isEnabled) continue;
 
-        const lastTrigger = ruleCooldowns.get(rule.id);
-        if (lastTrigger && (now - lastTrigger < RULE_COOLDOWN_MS)) continue;
+//         const lastTrigger = ruleCooldowns.get(rule.id);
+//         if (lastTrigger && (now - lastTrigger < RULE_COOLDOWN_MS)) continue;
 
-        const incidentSeverity = SEVERITY_MAP[newIncident.severity];
-        const ruleSeverity = SEVERITY_MAP[rule.conditions.severity_threshold];
+//         const incidentSeverity = SEVERITY_MAP[newIncident.severity];
+//         const ruleSeverity = SEVERITY_MAP[rule.conditions.severity_threshold];
 
-        if (incidentSeverity < ruleSeverity) continue;
+//         if (incidentSeverity < ruleSeverity) continue;
 
-        if (rule.conditions.type === 'single_incident') {
-            dispatchAlert(rule, {
-                incident_id: newIncident.id,
-                incident_type: newIncident.type,
-                incident_lat: newIncident.lat.toFixed(4),
-                incident_lon: newIncident.lon.toFixed(4),
-            });
-            ruleCooldowns.set(rule.id, now);
-        }
+//         if (rule.conditions.type === 'single_incident') {
+//             dispatchAlert(rule, {
+//                 incident_id: newIncident.id,
+//                 incident_type: newIncident.type,
+//                 incident_lat: newIncident.lat.toFixed(4),
+//                 incident_lon: newIncident.lon.toFixed(4),
+//             });
+//             ruleCooldowns.set(rule.id, now);
+//         }
 
-        if (rule.conditions.type === 'density') {
-            const { time_window_minutes, radius_meters, incident_count_threshold } = rule.conditions;
-            const timeWindowStart = now - time_window_minutes * 60 * 1000;
+//         if (rule.conditions.type === 'density') {
+//             const { time_window_minutes, radius_meters, incident_count_threshold } = rule.conditions;
+//             const timeWindowStart = now - time_window_minutes * 60 * 1000;
 
-            const recentIncidents = incidentsData.filter(i =>
-                new Date(i.timestamp).getTime() >= timeWindowStart &&
-                SEVERITY_MAP[i.severity] >= ruleSeverity
-            );
+//             const recentIncidents = incidentsData.filter(i =>
+//                 new Date(i.timestamp).getTime() >= timeWindowStart &&
+//                 SEVERITY_MAP[i.severity] >= ruleSeverity
+//             );
             
-            const cluster = recentIncidents.filter(i => 
-                getDistanceInMeters(newIncident.lat, newIncident.lon, i.lat, i.lon) <= radius_meters
-            );
+//             const cluster = recentIncidents.filter(i => 
+//                 getDistanceInMeters(newIncident.lat, newIncident.lon, i.lat, i.lon) <= radius_meters
+//             );
 
-            if (cluster.length >= incident_count_threshold) {
-                dispatchAlert(rule, {
-                    incident_count: cluster.length,
-                    severity_threshold: rule.conditions.severity_threshold,
-                    radius_meters,
-                    time_window_minutes,
-                    center_lat: newIncident.lat.toFixed(4),
-                    center_lon: newIncident.lon.toFixed(4),
-                });
-                ruleCooldowns.set(rule.id, now);
-            }
-        }
-    }
-}
+//             if (cluster.length >= incident_count_threshold) {
+//                 dispatchAlert(rule, {
+//                     incident_count: cluster.length,
+//                     severity_threshold: rule.conditions.severity_threshold,
+//                     radius_meters,
+//                     time_window_minutes,
+//                     center_lat: newIncident.lat.toFixed(4),
+//                     center_lon: newIncident.lon.toFixed(4),
+//                 });
+//                 ruleCooldowns.set(rule.id, now);
+//             }
+//         }
+//     }
+// }
 
 // --- Helper for Auditing ---
 const addAuditLog = (incident: Incident, action: string, comment: string) => {
@@ -399,7 +399,7 @@ app.post('/api/auth/switch', (req: ExpressRequest, res: ExpressResponse) => {
     }
 });
 // FIX: Add explicit types for req and res to route handler.
-app.post('/api/users/request-deletion', (req: ExpressRequest, res: ExpressResponse) => {
+app.post('/api/users/request-deletion', (_: ExpressRequest, res: ExpressResponse) => {
     const user = users.find(u => u.id === currentUser.id);
     if (user) {
         if (!user.deletionRequest || user.deletionRequest.status === 'completed') {
