@@ -32,7 +32,7 @@ const RuleEditor: React.FC<RuleEditorProps> = ({ rule, onClose, onSave }) => {
     useEffect(() => {
         const fetchTemplates = async () => {
             try {
-                const res = await fetch('/api/templates');
+                const res = await fetch('http://localhost:4000/api/templates');
                 const data = await res.json();
                 setTemplates(data);
                 if (!rule) {

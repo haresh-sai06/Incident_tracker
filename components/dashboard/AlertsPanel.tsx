@@ -27,7 +27,7 @@ const AlertsPanel: React.FC<AlertsPanelProps> = ({ rules, logs, onRuleChange }) 
     const handleDeleteRule = async (ruleId: string) => {
         if (!confirm('Are you sure you want to delete this rule?')) return;
         try {
-            const response = await fetch(`/api/rules/${ruleId}`, { method: 'DELETE' });
+            const response = await fetch(`http://localhost:4000/api/rules/${ruleId}`, { method: 'DELETE' });
             if (!response.ok) throw new Error('Failed to delete rule');
             onRuleChange();
         } catch (error) {
@@ -38,7 +38,7 @@ const AlertsPanel: React.FC<AlertsPanelProps> = ({ rules, logs, onRuleChange }) 
     
     const handleToggleRule = async (rule: AlertRule) => {
         try {
-            const response = await fetch(`/api/rules/${rule.id}`, {
+            const response = await fetch(`http://localhost:4000/api/rules/${rule.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...rule, isEnabled: !rule.isEnabled }),

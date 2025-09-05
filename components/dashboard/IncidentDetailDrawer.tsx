@@ -68,7 +68,7 @@ const IncidentDetailDrawer: React.FC<IncidentDetailDrawerProps> = ({ incident, i
 
   const handleAddNote = () => {
     if (newNote.trim() && incident) {
-      api.post(`/api/incidents/${incident.id}/note`, { note: newNote.trim() });
+      api.post(`http://localhost:4000/api/incidents/${incident.id}/note`, { note: newNote.trim() });
       setNewNote('');
     }
   };

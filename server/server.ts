@@ -382,11 +382,11 @@ const handleIdempotency = (req: ExpressRequest, res: ExpressResponse, next: Next
 
 // User management
 // FIX: Add explicit types for req and res to route handler to resolve type conflicts.
-app.get('/api/users', (_req: ExpressRequest, res: ExpressResponse) => res.json(users));
+app.get('http://localhost:4000/api/users', (_req: ExpressRequest, res: ExpressResponse) => res.json(users));
 // FIX: Add explicit types for req and res to route handler to resolve type conflicts.
-app.get('/api/auth/current', (_req: ExpressRequest, res: ExpressResponse) => res.json(currentUser));
+app.get('http://localhost:4000/api/auth/current', (_req: ExpressRequest, res: ExpressResponse) => res.json(currentUser));
 // FIX: Add explicit types for req and res to route handler.
-app.post('/api/auth/switch', (req: ExpressRequest, res: ExpressResponse) => {
+app.post('http://localhost:4000/api/auth/switch', (req: ExpressRequest, res: ExpressResponse) => {
     const { userId } = req.body;
     const user = users.find(u => u.id === userId);
     if (user) {
@@ -425,12 +425,12 @@ app.get('/api/admin/deletion-requests', (_req: ExpressRequest, res: ExpressRespo
 
 // Incident data
 // FIX: Add explicit types for req and res to route handler to resolve type conflicts.
-app.get('/api/incidents', (_req: ExpressRequest, res: ExpressResponse) => {
+app.get('http://localhost:4000/api/incidents', (_req: ExpressRequest, res: ExpressResponse) => {
     res.json(incidentsData.filter(i => i.isVerified));
 });
 
 // FIX: Add explicit types for req and res to route handler to resolve type conflicts.
-app.get('/api/incidents/all', (_req: ExpressRequest, res: ExpressResponse) => {
+app.get('http://localhost:4000/api/incidents/all', (_req: ExpressRequest, res: ExpressResponse) => {
     res.json(incidentsData);
 });
 
@@ -645,9 +645,9 @@ app.post('/api/kiosk/sync', (req: ExpressRequest, res: ExpressResponse) => {
 
 // Rules API
 // FIX: Add explicit types for req and res to route handler to resolve type conflicts.
-app.get('/api/rules', (_req: ExpressRequest, res: ExpressResponse) => res.json(alertRules));
+app.get('http://localhost:4000/api/rules', (_req: ExpressRequest, res: ExpressResponse) => res.json(alertRules));
 // FIX: Add explicit types for req and res to route handler to resolve type conflicts.
-app.get('/api/templates', (_req: ExpressRequest, res: ExpressResponse) => res.json(alertTemplates));
+app.get('http://localhost:4000/api/templates', (_req: ExpressRequest, res: ExpressResponse) => res.json(alertTemplates));
 
 // FIX: Add explicit types for req and res to route handler.
 app.post('/api/rules', (req: ExpressRequest, res: ExpressResponse) => {
@@ -677,7 +677,7 @@ app.delete('/api/rules/:id', (req: ExpressRequest, res: ExpressResponse) => {
 
 // Logs API
 // FIX: Add explicit types for req and res to route handler to resolve type conflicts.
-app.get('/api/alerts/logs', (_req: ExpressRequest, res: ExpressResponse) => res.json(alertLogs));
+app.get('http://localhost:4000/api/alerts/logs', (_req: ExpressRequest, res: ExpressResponse) => res.json(alertLogs));
 
 
 // --- Data Retention Purge Job ---

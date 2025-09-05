@@ -14,8 +14,8 @@ const ModerationPage: React.FC = () => {
     const fetchData = useCallback(async () => {
         try {
             const [incidentsRes, userRes] = await Promise.all([
-                fetch('/api/incidents/all'),
-                fetch('/api/auth/current')
+                fetch('http://localhost:4000/api/incidents/all'),
+                fetch('http://localhost:4000/api/auth/current')
             ]);
             if (!incidentsRes.ok || !userRes.ok) throw new Error('Failed to fetch data');
             

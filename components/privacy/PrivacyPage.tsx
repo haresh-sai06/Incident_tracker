@@ -13,13 +13,13 @@ const PrivacyPage: React.FC = () => {
     const fetchData = useCallback(async () => {
         setLoading(true);
         try {
-            const userRes = await fetch('/api/auth/current');
+            const userRes = await fetch('http://localhost:4000/api/auth/current');
             if (!userRes.ok) throw new Error('Failed to fetch current user');
             const userData: User = await userRes.json();
             setCurrentUser(userData);
 
             if (userData.role === 'Operator') {
-                const requestsRes = await fetch('/api/admin/deletion-requests');
+                const requestsRes = await fetch('http://localhost:4000/api/admin/deletion-requests');
                 if (!requestsRes.ok) throw new Error('Failed to fetch deletion requests');
                 const requestsData: User[] = await requestsRes.json();
                 setDeletionRequests(requestsData);
@@ -38,7 +38,7 @@ const PrivacyPage: React.FC = () => {
     const handleRequestDeletion = async () => {
         setIsSubmitting(true);
         try {
-            const response = await fetch('/api/users/request-deletion', { method: 'POST' });
+            const response = await fetch('http://localhost:4000/api/users/request-deletion', { method: 'POST' });
             if (!response.ok) throw new Error('Failed to submit request');
             const updatedUser = await response.json();
             setCurrentUser(updatedUser);

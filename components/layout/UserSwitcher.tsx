@@ -16,7 +16,7 @@ const UserSwitcher: React.FC<UserSwitcherProps> = ({ currentUser, onUserChange }
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await fetch('/api/users');
+                const response = await fetch('http://localhost:4000/api/users');
                 if (!response.ok) throw new Error('Failed to fetch users');
                 const data = await response.json();
                 setUsers(data);

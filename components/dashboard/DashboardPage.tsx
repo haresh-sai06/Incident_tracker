@@ -38,10 +38,10 @@ const DashboardPage: React.FC = () => {
     const fetchData = async () => {
         try {
             const [incidentsRes, rulesRes, logsRes, userRes] = await Promise.all([
-                fetch('/api/incidents/all'), // Fetch ALL incidents, not just verified
-                fetch('/api/rules'),
-                fetch('/api/alerts/logs'),
-                fetch('/api/auth/current')
+                fetch('http://localhost:4000/api/incidents/all'), // Fetch ALL incidents, not just verified
+                fetch('http://localhost:4000/api/rules'),
+                fetch('http://localhost:4000/api/alerts/logs'),
+                fetch('http://localhost:4000/api/auth/current')
             ]);
             if (!incidentsRes.ok || !rulesRes.ok || !logsRes.ok || !userRes.ok) {
                 throw new Error(`HTTP error! Failed to fetch initial data.`);
