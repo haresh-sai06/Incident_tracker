@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Tourist Safety Ops Dashboard
 
 A modern, responsive dashboard for real-time incident tracking and management. Built with React, Vite, TypeScript, and Tailwind CSS.
@@ -40,3 +41,7 @@ The application will automatically open in your browser and navigate to the dash
 ### Data
 
 The dashboard is pre-configured to use sample data from `/sample_data/incidents.json`. The WebSocket server also uses this file to generate new, random incidents for the real-time stream.
+=======
+# Incident_tracker
+to be added 
+>>>>>>> be16179022d86999bd8946b7d25f63b4ab031965
