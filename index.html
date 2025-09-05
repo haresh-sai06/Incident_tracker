@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Incident Response Dashboard</title>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#1e293b" />
+    <link rel="apple-touch-icon" href="/logo.svg" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <style>
+      /* Custom dark theme for leaflet */
+      .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+        background: #1e293b; /* neutral-800 */
+        color: #f1f5f9; /* neutral-100 */
+        border: 1px solid #334155; /* neutral-700 */
+        box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+      }
+      .leaflet-popup-close-button { color: #f1f5f9 !important; }
+      .leaflet-container { background: #0f172a; /* neutral-900 */ }
+      .leaflet-control-zoom-in, .leaflet-control-zoom-out, .leaflet-control-layers-toggle {
+        background-color: #1e293b !important;
+        border: 1px solid #334155 !important;
+        color: #f1f5f9 !important;
+      }
+      .leaflet-control-layers {
+        background: #1e293b !important;
+        color: #f1f5f9 !important;
+        border: 1px solid #334155 !important;
+      }
+      .leaflet-control-zoom-in:hover, .leaflet-control-zoom-out:hover, .leaflet-control-layers-toggle:hover {
+        background-color: #334155 !important;
+      }
+      .leaflet-tile-pane {
+        filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+      }
+      .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
+        background-color: rgba(37, 99, 235, 0.6) !important;
+        border: 2px solid rgba(59, 130, 246, 0.8);
+      }
+      .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
+        background-color: rgba(30, 64, 175, 0.8) !important;
+        color: #fff;
+      }
+      /* Pulse animation for new markers */
+      .marker-pulse {
+        position: relative;
+        display: flex;
+        height: 16px;
+        width: 16px;
+      }
+      .marker-pulse-ping {
+        position: absolute;
+        display: inline-flex;
+        height: 100%;
+        width: 100%;
+        border-radius: 9999px;
+        animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+        opacity: 0.75;
+      }
+      .marker-pulse-core {
+        position: relative;
+        display: inline-flex;
+        border-radius: 9999px;
+        height: 16px;
+        width: 16px;
+      }
+      @keyframes ping {
+        0% {
+          transform: scale(0.2);
+          opacity: 0.75;
+        }
+        80% {
+          transform: scale(2.2);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(2.2);
+          opacity: 0;
+        }
+      }
+      /* Fallback font stack */
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+    </style>
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js",
+    "react-dom/": "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/",
+    "react/": "https://cdn.jsdelivr.net/npm/react@18.2.0/umd/",
+    "react-router-dom": "https://cdn.jsdelivr.net/npm/react-router-dom@6.26.2/dist/umd/react-router-dom.production.min.js",
+    "lucide-react": "https://cdn.jsdelivr.net/npm/lucide-react@0.441.0/dist/umd/lucide-react.min.js",
+    "react-leaflet": "https://cdn.jsdelivr.net/npm/react-leaflet@4.2.1/dist/react-leaflet.min.js",
+    "leaflet": "https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js",
+    "leaflet.markercluster": "https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.min.js",
+    "vite": "https://aistudiocdn.com/vite@^7.1.4",
+    "express": "https://aistudiocdn.com/express@^5.1.0",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.0.2",
+    "path": "https://aistudiocdn.com/path@^0.12.7",
+    "https": "https://aistudiocdn.com/https@^1.0.0",
+    "cors": "https://aistudiocdn.com/cors@^2.8.5",
+    "http": "https://aistudiocdn.com/http@^0.0.1-security",
+    "fs": "https://aistudiocdn.com/fs@^0.0.1-security",
+    "ws": "https://aistudiocdn.com/ws@^8.18.3",
+    "url": "https://aistudiocdn.com/url@^0.11.4",
+    "node-fetch": "https://aistudiocdn.com/node-fetch@^3.3.2",
+    "idb": "https://aistudiocdn.com/idb@^8.0.3",
+    "uuid": "https://aistudiocdn.com/uuid@^11.1.0",
+    "vitest": "https://aistudiocdn.com/vitest@^3.2.4",
+    "cypress": "https://aistudiocdn.com/cypress@^15.1.0"
+  }
+}
+</script>
+  <link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-neutral-950 text-neutral-100 font-sans">
+    <div id="root"></div>
+    <script type="module" src="index.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then(registration => {
+            console.log('Service Worker registered: ', registration);
+          }).catch(registrationError => {
+            console.log('Service Worker registration failed: ', registrationError);
+          });
+        });
+      }
+    </script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

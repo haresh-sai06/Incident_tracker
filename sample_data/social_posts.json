@@ -1,0 +1,12 @@
+[
+  { "id": "soc_001", "source": "Twitter", "author": "@sf_resident", "content": "Huge fire near the Ferry Building! Lots of black smoke, sirens everywhere. Avoid the area!", "timestamp": "2024-05-21T16:50:00Z" },
+  { "id": "soc_002", "source": "Facebook", "author": "BayAreaEvents", "content": "Don't miss the free concert in Golden Gate Park this afternoon! Great music and food trucks.", "timestamp": "2024-05-21T16:45:10Z" },
+  { "id": "soc_003", "source": "Twitter", "author": "@commuter_life", "content": "Major accident on the Bay Bridge, eastbound lanes are completely blocked. Traffic is a nightmare.", "timestamp": "2024-05-21T16:42:00Z" },
+  { "id": "soc_004", "source": "Twitter", "author": "@concerned_cit", "content": "Just saw a group of people vandalizing the new mural on Valencia. Someone should call the police.", "timestamp": "2024-05-21T16:35:00Z" },
+  { "id": "soc_005", "source": "Instagram", "author": "foodie_sf", "content": "Amazing new brunch spot in the Mission! The pancakes are to die for. #sfeats #brunch", "timestamp": "2024-05-21T16:30:00Z" },
+  { "id": "soc_006", "source": "Twitter", "author": "@runner_dave", "content": "My car was just broken into near Alamo Square. They stole my laptop. Be careful out there.", "timestamp": "2024-05-21T16:22:00Z" },
+  { "id": "soc_007", "source": "Facebook", "author": "SF Shop Local", "content": "Big summer sale starts today at all our downtown locations! Up to 50% off.", "timestamp": "2024-05-21T16:15:00Z" },
+  { "id": "soc_008", "source": "Twitter", "author": "@jenny_s", "content": "There's some kind of emergency services response at the 16th St BART station. Multiple police cars and an ambulance.", "timestamp": "2024-05-21T16:10:00Z" },
+  { "id": "soc_009", "source": "Twitter", "author": "@sf_observer", "content": "Sounds like there was a loud explosion around the Dogpatch area. Anyone else hear that? A little scary.", "timestamp": "2024-05-21T16:05:00Z" },
+  { "id": "soc_010", "source": "Facebook", "author": "Marina Neighborhood Watch", "content": "Reports of suspicious activity on Lombard Street. A person was seen looking into parked cars. Please stay vigilant.", "timestamp": "2024-05-21T15:55:00Z" }
+]

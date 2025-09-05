@@ -1,0 +1,14 @@
+[
+  {
+    "id": "template_001",
+    "name": "High Severity Cluster",
+    "subject": "ALERT: High Severity Incident Cluster Detected",
+    "body": "ALERT: {{incident_count}} incidents with severity '{{severity_threshold}}' or higher have been detected within a {{radius_meters}}m radius in the last {{time_window_minutes}} minutes near {{center_lat}}, {{center_lon}}. Please investigate immediately."
+  },
+  {
+    "id": "template_002",
+    "name": "Critical Incident Reported",
+    "subject": "CRITICAL INCIDENT ALERT",
+    "body": "A new critical incident '{{incident_type}}' (ID: {{incident_id}}) has been reported at {{incident_lat}}, {{incident_lon}}. Immediate dispatch required."
+  }
+]

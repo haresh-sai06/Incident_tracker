@@ -1,0 +1,38 @@
+[
+  {
+    "id": "rule_001",
+    "name": "High Severity Cluster Downtown",
+    "isEnabled": true,
+    "conditions": {
+      "type": "density",
+      "severity_threshold": "High",
+      "incident_count_threshold": 3,
+      "time_window_minutes": 10,
+      "radius_meters": 500
+    },
+    "action": {
+      "template_id": "template_001",
+      "recipients": [
+        { "type": "email", "target": "ops-lead@example.com" },
+        { "type": "sms", "target": "+15551234567" }
+      ]
+    }
+  },
+  {
+    "id": "rule_002",
+    "name": "Any Critical Incident",
+    "isEnabled": true,
+    "conditions": {
+      "type": "single_incident",
+      "severity_threshold": "Critical"
+    },
+    "action": {
+      "template_id": "template_002",
+      "recipients": [
+        { "type": "email", "target": "supervisor@example.com" },
+        { "type": "push", "target": "all_operators" },
+        { "type": "ivr", "target": "+15557654321" }
+      ]
+    }
+  }
+]

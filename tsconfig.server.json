@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist_server",
+    "noEmit": false,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "isolatedModules": false,
+    "types": ["node"],
+    "sourceMap": false,
+    "inlineSourceMap": false
+  },
+  "include": ["server/**/*.ts", "utils/**/*.ts"],
+  "exclude": ["**/*.test.ts", "node_modules"]
+}

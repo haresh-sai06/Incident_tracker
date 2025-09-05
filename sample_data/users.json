@@ -1,0 +1,33 @@
+
+[
+  {
+    "id": "user_001",
+    "name": "Jane Doe",
+    "role": "Operator",
+    "consents": [
+      {
+        "type": "terms_of_service",
+        "timestamp": "2024-01-01T10:00:00Z",
+        "version": "1.0"
+      }
+    ],
+    "deletionRequest": null
+  },
+  {
+    "id": "user_002",
+    "name": "Partner Agency A",
+    "role": "Partner",
+    "agency": "Community Outreach",
+    "consents": [
+      {
+        "type": "terms_of_service",
+        "timestamp": "2024-02-15T14:30:00Z",
+        "version": "1.0"
+      }
+    ],
+    "deletionRequest": {
+        "requestedAt": "2024-05-20T11:00:00Z",
+        "status": "pending"
+    }
+  }
+]

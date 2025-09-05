@@ -1,0 +1,5 @@
+{
+  "name": "Incident Response Dashboard",
+  "description": "A dashboard for monitoring and managing incidents in real-time. It provides a map-based view, a detailed incident list, and key statistics for quick operational awareness.",
+  "requestFramePermissions": []
+}
